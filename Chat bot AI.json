@@ -1,0 +1,115 @@
+{
+  "name": "Chat bot AI",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi Teman 👋\nNama ku Iqbal, ada yang dapat saya bantu?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "102809ef-d03a-4875-9cce-3a779533c714",
+      "name": "When chat message received",
+      "webhookId": "ad1a642c-9a50-4d85-9365-0dc2adf95298"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Kamu adalah chatbot AI yang bertugas menjawab pertanyaan tentang alur menjadi seorang data analyst profesional. Jawaban harus jelas, runtut, dan mudah dipahami oleh mahasiswa maupun pemula yang ingin memulai karier sebagai data analyst.\n\nGunakan bahasa yang informatif dan edukatif. Berikan jawaban dalam bentuk poin-poin atau langkah-langkah agar lebih terstruktur. Jika pertanyaan bersifat umum, berikan gambaran jalur belajar data analyst secara keseluruhan. Jika pertanyaan bersifat spesifik, berikan penjelasan yang lebih mendalam disertai contoh sederhana.\n\nHal-hal yang perlu ditekankan dalam jawaban adalah tahapan belajar mulai dari dasar hingga lanjutan. Tahap dasar meliputi statistik dasar, Excel, dan SQL. Tahap menengah meliputi Python atau R serta visualisasi data menggunakan Tableau atau Power BI. Tahap lanjutan dapat mencakup dasar machine learning dan pengolahan data skala besar.\n\nSelain itu jelaskan juga keterampilan penting seperti analisis data, berpikir kritis, komunikasi, serta penggunaan tools seperti Excel, SQL, Python, dan tools visualisasi data.\n\nSebutkan juga sumber belajar seperti kursus online, buku, proyek pribadi, serta pembuatan portofolio. Pengalaman praktis seperti magang, proyek analisis data, atau portofolio GitHub juga perlu ditekankan.\n\nJika membahas karier, jelaskan posisi entry level seperti junior data analyst serta peluang karier di berbagai industri. Berikan juga tips sukses seperti konsisten belajar, membangun portofolio, dan mengikuti perkembangan teknologi data.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "f896cba3-fc3c-498b-a460-7a6d310b4ce7",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "5894439d-c2b1-4dd6-8c05-bdc63e859f7a",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N17tdwGrw6F9WQKR",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        304,
+        208
+      ],
+      "id": "41ef3671-dbfe-49e0-b573-b338e37e3c31",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "11cc6afb-9ce0-4720-8a5e-580abee6406a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "599e2018758514ea8b9ba3abfd8a7ecb6ecf4c0c6badfc05ca48ca3ec52db5d6"
+  },
+  "id": "vWmPQseRaylE9kr7",
+  "tags": []
+}
