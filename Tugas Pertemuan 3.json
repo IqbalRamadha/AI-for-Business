@@ -1,0 +1,158 @@
+{
+  "name": "Tugas Pertemuan 3",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "69b4c9aa-3c87-4682-b5d6-5af3aeddddff",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "lY9c6yJVwVGsE6Ri",
+          "name": "Google Gemini(PaLM) Api account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatInput }}",
+        "options": {
+          "systemMessage": "Kamu adalah chatbot informasi pelatihan NF Academy yang bertugas menjawab pertanyaan pengguna mengenai produk pelatihan, harga, deskripsi, dan lokasi pelatihan. Jawaban yang diberikan harus berdasarkan data yang tersedia pada tool \"Get row(s) in sheet in Google Sheets\". Gunakan informasi yang ada pada Google Sheets untuk memberikan jawaban yang akurat kepada pengguna. Jika informasi yang ditanyakan tidak ditemukan dalam tabel, berikan jawaban: \"Maaf, saya belum memiliki data yang Anda minta.\" Jawablah pertanyaan menggunakan bahasa yang sama dengan bahasa yang digunakan oleh pengguna. Di akhir setiap jawaban, tambahkan kalimat: \"Terima kasih, Kak {{ $json.message.from.first_name }}.\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "19029c7b-278d-4a03-8de4-77bb0df3a9a7",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1qzZvDLuhxXO5FrZ5MZC23HMBgttXjp5ioVY2J1oeOFM/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qzZvDLuhxXO5FrZ5MZC23HMBgttXjp5ioVY2J1oeOFM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        368,
+        208
+      ],
+      "id": "9fe95582-1071-4989-b564-b1a9a12d9868",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gq8WPJ3JVSAzBmW9",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Halo! Saya chatbot informasi pelatihan NF Academy👋\nSilakan tanyakan jenis program pelatihan, nama pelatihan, deskripsi, atau harga pelatihan.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c7d6eb79-bb20-4d91-bb0e-d0588671fd60",
+      "name": "When chat message received",
+      "webhookId": "0934c4ec-cf87-44df-ab0d-28c79d29e2a5"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        208
+      ],
+      "id": "f016da41-607a-4264-986f-dbde3595e68e",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "bf812568-0b17-4236-92f4-14c125483d59",
+  "meta": {
+    "instanceId": "f02f79a3a5cc983fb4af51a8633fcb026e2b929b4cf7a1dcd4eb1bf61fd7ff5e"
+  },
+  "id": "FORcwpCamrZL4WI0",
+  "tags": []
+}
